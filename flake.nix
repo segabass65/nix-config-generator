@@ -7,7 +7,7 @@
   in {
     lib = {
       toSxhkd = { keybindings, extraConfig ? "" }: let
-        config = lib.mapAttrsToList (
+        keybindingsList = lib.mapAttrsToList (
           hotkey: command:
             lib.optionalString (command != null) ''
               ${hotkey}
@@ -16,7 +16,7 @@
         ) keybindings;
 
       in
-        lib.concatStringsSep "\n" (config ++ [ extraConfig ]);
+        lib.concatStringsSep "\n" (keybindingsList ++ [ extraConfig ]);
     };
   };
 }
