@@ -78,7 +78,7 @@
           # Base case
           else
             [ (lib.nameValuePair key value) ];
-        
+
         convertPolybarSection = _: attrs:
           lib.listToAttrs (
             lib.concatLists (lib.mapAttrsToList convertPolybarKeyVal attrs)
@@ -97,6 +97,28 @@
 
       else
         null;
+
+      toColoraddod = { settings ? { }, extraConfig ? "" }: let
+        flatten = prefix: value:
+          if builtins.typeOf value == "set" then
+            builtins.concatLists (
+              builtins.attrValues (
+                builtins.mapAttrs (attrKey: attrValue:
+                  flatten (prefix ++ [ attrKey ]) attrValue
+                ) value
+              )
+            )
+
+          else [ (builtins.toString (prefix ++ [ value ])) ];
+
+      in
+        builtins.concatStringsSep "\n" (
+          (
+            builtins.map
+              (value: lib.escapeShellArgs (lib.strings.splitString " " value))
+              (flatten [ "coloraddoctl config" ] settings)
+          ) ++ [ extraConfig ]
+        );
     };
   };
 }
