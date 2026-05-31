@@ -44,6 +44,20 @@
           echo Hello, World!
         '';
       };
+
+      "config-generator/betterlockscreen/betterlockscreenrc".text =
+        toBetterlockscreen {
+          settings = {
+            bgcolor = "ffffff";
+            display_on = 0;
+            fx_list = [ "dim" "blur" "dimblur" "pixel" "dimpixel" "color" ];
+            locktext = "Hello, World!";
+          };
+
+          extraConfig = ''
+            greetercolor=000000
+          '';
+        };
     };
   };
 

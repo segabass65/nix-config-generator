@@ -110,4 +110,29 @@
           (flatten [ "coloraddoctl config" ] settings)
       ) ++ [ extraConfig ]
     );
+
+  toBetterlockscreen = { settings ? { }, extraConfig ? "" }: let
+    toConfigLine = key: value: let
+      value' = if lib.isBool value then
+        if value then "true" else "false"
+
+      else if 
+        lib.isString value &&
+        lib.hasInfix " " value
+      then
+        ''"${value}"''
+
+      else if lib.isList value then
+        "(${lib.toString value})"
+
+      else
+        toString value;
+
+    in
+      "${key}=${value'}";
+
+  in
+    builtins.concatStringsSep "\n" (
+      lib.mapAttrsToList toConfigLine settings ++ [ extraConfig ]
+    );
 }
