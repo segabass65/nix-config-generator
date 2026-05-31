@@ -5,5 +5,6 @@
 
   outputs = { self, nixpkgs, ... }: {
     lib = import ./lib.nix { inherit (nixpkgs) lib; };
+    homeModules = import ./home.nix { inherit (self) lib; };
   };
 }
